@@ -51,7 +51,7 @@ namespace Qieshu
         {
             eliThreading.isWorking = true;
             string url = Url.Text;
-            Data.p = new post(url, true);
+            Data.p = new post(url);
             eliThreading.isWorking = false;
         }
 
@@ -95,6 +95,7 @@ namespace Qieshu
             if (url != "")
             {
                 statusText.Text = "正在載入……";
+                totalStatus.Value = 0;
                 currentMission.Text = "讀取中： " + url;
 
                 Thread worker = new Thread(WorkingThread);
@@ -129,7 +130,7 @@ namespace Qieshu
 
         private void OutputButton_Click(object sender, EventArgs e)
         {
-            if (!Data.p.status) return;
+            if (Data.p == null || !Data.p.status) return;
             exportDialog.FileName = Data.p.title + ".txt";
             exportDialog.ShowDialog();
         }
@@ -189,7 +190,7 @@ namespace Qieshu
     }
     public class Data
     {
-        public static post p;
+        public static post p = null;
     }
     public class Options
     {

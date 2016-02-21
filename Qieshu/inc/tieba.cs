@@ -2,9 +2,16 @@
 
 namespace Qieshu.inc
 {
+    public class image
+    {
+        public string url;
+        public string format;
+        public int width, height;
+    }
     public class floor
     {
         public string content;
+        public image[] images;
     }
     public class page
     {
@@ -60,63 +67,76 @@ namespace Qieshu.inc
             r = r.Substring(1, r.Length - 2);
             return Convert.ToInt32(r);
         }
-
-        public page[] getSinglePage()
+        public image[] getFloorImages(string rawfloor)
         {
-            page[] ps = new page[1];
+            string pattern = "<img class=\"BDE_Image\".*?>";
+            string[] rawimages = match.preg_match_multi(rawfloor, pattern);
+            image[] images = new image[rawimages.Length];
+            for(int i = 0; i < rawimages.Length; i++)
+            {
+                images[i] = new image();
+                string tag = rawimages[i];
+
+                pattern = "width=\"[0-9].*?\"";
+                // width="450"
+                // 0123456789A
+                string ws = match.preg_match(tag, pattern);
+                ws = ws.Substring(7, ws.Length - 8);
+                images[i].width = Convert.ToInt32(ws);
+
+                pattern = "height=\"[0-9].*?\"";
+                // height="450"
+                // 0123456789AB
+                string hs = match.preg_match(tag, pattern);
+                hs = hs.Substring(8, hs.Length - 9);
+                images[i].height = Convert.ToInt32(hs);
+
+                pattern = "src=\".*?\"";
+                // src="s.jpg"
+                // 0123456789A
+                string src = match.preg_match(tag, pattern);
+                src = src.Substring(5, src.Length - 6);
+                images[i].url = src;
+                pattern = "\\.\\w+$";
+                images[i].format = match.preg_match(src, pattern);
+            }
+            return images;
+        }
+        public floor[] getPageFloors(int number)
+        {
+            string url = from + (Options.doSeeLZonly ? "?see_lz=1&pn=" : "?pn=") + number;
+            raw = http.get(url);
             string pattern = "<cc>.*?</cc>";
             string[] rawfloors = match.preg_match_multi(raw, pattern);
-            ps[0].floors = new floor[rawfloors.Length];
-            for (int i = 0; i < rawfloors.Length; i++)
+            floor[] floors = new floor[rawfloors.Length];
+            for(int i = 0; i < rawfloors.Length; i++)
             {
-                ps[0].floors[i] = new floor();
-                ps[i].floors[i].content = match.html2plain(rawfloors[i]);
-                if (ps[0].floors[i].content.Length < Options.vVal)
+                floors[i] = new floor();
+                floors[i].content = match.html2plain(rawfloors[i]);
+                if (Options.doRemoveShort)
                 {
-                    ps[0].floors[i].content = "";
-                }
-            }
-            return ps;
-        }
-        public page[] getPostPages() {
-            page[] ps = new page[pn + 1];
-            for(int i=0;i <= pn; i++)
-            {
-                eliThreading.setUpdate(i, pn, title);
-                ps[i] = new page();
-                string url = from + (Options.doSeeLZonly ? "?see_lz=1&pn=" : "?pn=") + i;
-                raw = http.get(url);
-                string pattern = "<cc>.*?</cc>";
-                match m = new match();
-                string[] rawfloors = match.preg_match_multi(raw, pattern);
-                ps[i].floors = new floor[rawfloors.Length];
-                for (int j = 0; j < rawfloors.Length; j++)
-                {
-                    ps[i].floors[j] = new floor();
-                    ps[i].floors[j].content = match.html2plain(rawfloors[j]);
-                    if (Options.doRemoveShort)
+                    if (floors[i].content.Length < Options.vVal)
                     {
-                        if(ps[i].floors[j].content.Length < Options.vVal)
-                        {
-                            ps[i].floors[j].content = "";
-                        }
+                        floors[i].content = "";
                     }
                 }
+                floors[i].images = getFloorImages(rawfloors[i]);
+            }
+            return floors;
+        }
+        public page[] getPostPages() {
+            page[] ps = new page[pn];
+            for(int i=0;i < pn; i++)
+            {
+                eliThreading.setUpdate(i + 1, pn, title);
+                ps[i] = new page();
+                ps[i].floors = getPageFloors(i);
             }
             return ps;
         }
 
         public post() { }
-        public post(string html) {
-            raw = html;
-            pid = getPostId();
-            lz = getPostAuthor();
-            pn = getPostPageCount();
-            from = "http://tieba.baidu.com/p/" + pid;
-            pages = getSinglePage();
-            status = true;
-        }
-        public post(string url, bool fromurl = true) {
+        public post(string url) {
             if (url.Contains("?")) url = url.Substring(0, url.IndexOf("?") + 1);
             if (Options.doSeeLZonly) url += "?see_lz=1";
 
