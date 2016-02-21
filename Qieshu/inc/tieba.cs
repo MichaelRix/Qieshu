@@ -19,6 +19,7 @@ namespace Qieshu.inc
         public page[] pages;
         public string lz;
         public string raw;
+        public bool status = false;
 
         public string getPostId()
         {
@@ -113,6 +114,7 @@ namespace Qieshu.inc
             pn = getPostPageCount();
             from = "http://tieba.baidu.com/p/" + pid;
             pages = getSinglePage();
+            status = true;
         }
         public post(string url, bool fromurl = true) {
             if (url.Contains("?")) url = url.Substring(0, url.IndexOf("?") + 1);
@@ -120,12 +122,14 @@ namespace Qieshu.inc
 
             raw = http.get(url);
             title = getPostTitle();
+            title = match.htmlspecialchars_decode(title);
             pid = getPostId();
             lz = getPostAuthor();
             pn = getPostPageCount();
             from = "http://tieba.baidu.com/p/" + pid;
             eliThreading.setUpdate(0, pn, title);
             pages = getPostPages();
+            status = true;
         }
     }
 }

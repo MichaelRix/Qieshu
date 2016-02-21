@@ -14,7 +14,7 @@ namespace Qieshu
         {
             while (true)
             {
-                if (eliThreading.isFinished)
+                if (!eliThreading.isWorking)
                 {
                     StringBuilder sb = new StringBuilder();
                     foreach (page pg in Data.p.pages)
@@ -31,8 +31,6 @@ namespace Qieshu
                     eliThreading.status = "";
                     eliThreading.percentage = 0;
                     eliThreading.mission = "";
-                    eliThreading.isFinished = false;
-                    eliThreading.isWorking = false;
                     return;
                 }
                 if (eliThreading.doRequireUpdate)
@@ -52,10 +50,9 @@ namespace Qieshu
         private void WorkingThread()
         {
             eliThreading.isWorking = true;
-            eliThreading.isFinished = false;
             string url = Url.Text;
             Data.p = new post(url, true);
-            eliThreading.isFinished = true;
+            eliThreading.isWorking = false;
         }
 
         public MainForm()
@@ -132,6 +129,7 @@ namespace Qieshu
 
         private void OutputButton_Click(object sender, EventArgs e)
         {
+            if (!Data.p.status) return;
             exportDialog.FileName = Data.p.title + ".txt";
             exportDialog.ShowDialog();
         }
@@ -141,20 +139,27 @@ namespace Qieshu
             string filename = exportDialog.FileName;
             if(filename != "")
             {
-                FileStream fs = new FileStream(filename, FileMode.CreateNew);
-                StreamWriter sw = new StreamWriter(fs);
-                StringBuilder sb = new StringBuilder();
-                foreach(page p in Data.p.pages)
+                try
                 {
-                    foreach(floor f in p.floors)
+                    FileStream fs = new FileStream(filename, FileMode.CreateNew);
+                    StreamWriter sw = new StreamWriter(fs);
+                    StringBuilder sb = new StringBuilder();
+                    foreach (page p in Data.p.pages)
                     {
-                        sb.Append(f.content);
+                        foreach (floor f in p.floors)
+                        {
+                            sb.Append(f.content);
+                        }
                     }
+                    sw.Write(sb.ToString());
+                    sw.Close();
+                    fs.Close();
+                    MessageBox.Show("保存完成！" + Environment.NewLine + filename, "導出", MessageBoxButtons.OK);
                 }
-                sw.Write(sb.ToString());
-                sw.Close();
-                fs.Close();
-                MessageBox.Show("保存完成！" + Environment.NewLine + filename, "導出", MessageBoxButtons.OK);
+                catch (Exception)
+                {
+                    throw new Exception("（╯－＿－）╯╧╧");
+                }
             }
         }
     }
@@ -164,7 +169,6 @@ namespace Qieshu
         public static int percentage;
         public static string mission;
         public static bool isWorking = false;
-        public static bool isFinished = false;
         public static bool doRequireUpdate = false;
 
         public static void reportUpdated()

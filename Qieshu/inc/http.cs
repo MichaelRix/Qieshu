@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.IO;
 
 namespace Qieshu.inc
@@ -8,13 +9,19 @@ namespace Qieshu.inc
     {
         public static string get(string url)
         {
-            WebRequest request;
-            request = WebRequest.Create(url);
-            request.Proxy = WebRequest.DefaultWebProxy;
-            Stream response = request.GetResponse().GetResponseStream();
-            StreamReader read = new StreamReader(response);
-            string responseText = read.ReadToEnd();
-            return responseText;
+            try
+            {
+                WebRequest request;
+                request = WebRequest.Create(url);
+                request.Proxy = WebRequest.DefaultWebProxy;
+                Stream response = request.GetResponse().GetResponseStream();
+                StreamReader reader = new StreamReader(response);
+                string responseText = reader.ReadToEnd();
+                return responseText;
+            }catch(Exception)
+            {
+                throw new Exception("（╯－＿－）╯╧╧");
+            }
         }
     }
 }
