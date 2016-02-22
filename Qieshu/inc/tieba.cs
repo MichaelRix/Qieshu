@@ -128,9 +128,9 @@ namespace Qieshu.inc
             page[] ps = new page[pn];
             for(int i=0;i < pn; i++)
             {
-                eliThreading.setUpdate(i + 1, pn, title);
+                eliThreading.setUpdate(i, pn, title);
                 ps[i] = new page();
-                ps[i].floors = getPageFloors(i);
+                ps[i].floors = getPageFloors(i + 1);
             }
             return ps;
         }

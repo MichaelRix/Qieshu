@@ -57,6 +57,9 @@
     </Compile>
     <Compile Include="inc\http.cs" />
     <Compile Include="inc\match.cs" />
+    <Compile Include="inc\threading.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="inc\tieba.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
