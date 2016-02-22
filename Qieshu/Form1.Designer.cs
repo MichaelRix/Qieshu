@@ -111,7 +111,7 @@
             // 
             this.checkRemoveShort.AutoSize = true;
             this.checkRemoveShort.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.checkRemoveShort.Location = new System.Drawing.Point(133, 46);
+            this.checkRemoveShort.Location = new System.Drawing.Point(124, 46);
             this.checkRemoveShort.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.checkRemoveShort.Name = "checkRemoveShort";
             this.checkRemoveShort.Size = new System.Drawing.Size(111, 21);
@@ -124,7 +124,7 @@
             // 
             this.checkTrimLeft.AutoSize = true;
             this.checkTrimLeft.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.checkTrimLeft.Location = new System.Drawing.Point(332, 46);
+            this.checkTrimLeft.Location = new System.Drawing.Point(323, 46);
             this.checkTrimLeft.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.checkTrimLeft.Name = "checkTrimLeft";
             this.checkTrimLeft.Size = new System.Drawing.Size(111, 21);
@@ -136,7 +136,7 @@
             // OutputButton
             // 
             this.OutputButton.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.OutputButton.Location = new System.Drawing.Point(500, 41);
+            this.OutputButton.Location = new System.Drawing.Point(568, 42);
             this.OutputButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.OutputButton.Name = "OutputButton";
             this.OutputButton.Size = new System.Drawing.Size(87, 26);
@@ -187,7 +187,7 @@
             // 
             // vValNum
             // 
-            this.vValNum.Location = new System.Drawing.Point(250, 44);
+            this.vValNum.Location = new System.Drawing.Point(241, 44);
             this.vValNum.Maximum = new decimal(new int[] {
             500,
             0,
@@ -227,6 +227,8 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "MainForm";
             this.Text = "竊書不能算偷竊書";
             this.Load += new System.EventHandler(this.MainForm_Load);
