@@ -100,12 +100,13 @@ namespace Qieshu.inc
                 pattern = "\\.\\w+$";
                 images[i].format = match.preg_match(src, pattern);
             }
+            eliThreading.floorUpdate(0, images.Length);
             return images;
         }
         public floor[] getPageFloors(int number)
         {
             string url = from + (Options.doSeeLZonly ? "?see_lz=1&pn=" : "?pn=") + number;
-            raw = http.get(url);
+            if (number != 1) raw = http.get(url);
             string pattern = "<cc>.*?</cc>";
             string[] rawfloors = match.preg_match_multi(raw, pattern);
             floor[] floors = new floor[rawfloors.Length];
@@ -122,15 +123,17 @@ namespace Qieshu.inc
                 }
                 floors[i].images = getFloorImages(rawfloors[i]);
             }
+            eliThreading.floorUpdate(floors.Length, 0);
             return floors;
         }
         public page[] getPostPages() {
             page[] ps = new page[pn];
             for(int i=0;i < pn; i++)
             {
-                eliThreading.setUpdate(i, pn, title);
+                eliThreading.setUpdate(i + 1, pn, title);
                 ps[i] = new page();
                 ps[i].floors = getPageFloors(i + 1);
+                eliThreading.textUpdate(i + 1);
             }
             return ps;
         }
