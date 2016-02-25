@@ -87,34 +87,32 @@ namespace Qieshu
         {
             if (Data.p == null || !Data.p.status) return;
             exportDialog.FileName = Data.p.title + ".txt";
-            exportDialog.ShowDialog();
-        }
-
-        private void exportDialog_FileOk(object sender, CancelEventArgs e)
-        {
-            string filename = exportDialog.FileName;
-            if(filename != "")
+            if (exportDialog.ShowDialog() == DialogResult.OK)
             {
-                try
+                string filename = exportDialog.FileName;
+                if (filename != "")
                 {
-                    FileStream fs = new FileStream(filename, FileMode.CreateNew);
-                    StreamWriter sw = new StreamWriter(fs);
-                    StringBuilder sb = new StringBuilder();
-                    foreach (page p in Data.p.pages)
+                    try
                     {
-                        foreach (floor f in p.floors)
+                    FileStream fs = new FileStream(filename, FileMode.CreateNew | FileMode.Truncate, FileAccess.Write);
+                        StreamWriter sw = new StreamWriter(fs);
+                        StringBuilder sb = new StringBuilder();
+                        foreach (page p in Data.p.pages)
                         {
-                            sb.Append(f.content);
+                            foreach (floor f in p.floors)
+                            {
+                                sb.Append(f.content);
+                            }
                         }
+                        sw.Write(sb.ToString());
+                        sw.Close();
+                        fs.Close();
+                        MessageBox.Show("保存完成！" + Environment.NewLine + filename, "導出", MessageBoxButtons.OK);
                     }
-                    sw.Write(sb.ToString());
-                    sw.Close();
-                    fs.Close();
-                    MessageBox.Show("保存完成！" + Environment.NewLine + filename, "導出", MessageBoxButtons.OK);
-                }
-                catch (Exception)
-                {
-                    throw new Exception("（╯－＿－）╯╧╧");
+                    catch (Exception)
+                    {
+                        throw new Exception("（╯－＿－）╯╧╧");
+                    }
                 }
             }
         }

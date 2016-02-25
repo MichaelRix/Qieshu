@@ -180,10 +180,10 @@
             // 
             // exportDialog
             // 
+            this.exportDialog.CreatePrompt = true;
             this.exportDialog.DefaultExt = "txt";
             this.exportDialog.Filter = "純文本檔|*.txt";
             this.exportDialog.Title = "輸出至純文本檔";
-            this.exportDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.exportDialog_FileOk);
             // 
             // vValNum
             // 
