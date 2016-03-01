@@ -45,6 +45,11 @@ namespace Qieshu
         private void GetButton_Click(object sender, EventArgs e)
         {
             if (eliThreading.isWorking) return;
+            if(Data.p != null)
+            {
+                if(MessageBox.Show("你確定要放棄當前所有内容并進行采集嗎？", "核准選項", MessageBoxButtons.YesNo) == DialogResult.No)
+                    return;
+            }
             string url = Url.Text;
             if (url.IndexOf("http://tieba.baidu.com/p/") != 0) return;
             if (url != "")
@@ -92,17 +97,9 @@ namespace Qieshu
                 string filename = exportDialog.FileName;
                 if (filename != "")
                 {
-                    //try
-                    //{
-                    FileStream fs;
-                    if (File.Exists(filename))
+                    try
                     {
-                        fs = new FileStream(filename, FileMode.Truncate, FileAccess.Write);
-                    }
-                    else
-                    {
-                        fs = new FileStream(filename, FileMode.CreateNew, FileAccess.Write);
-                    }
+                    FileStream fs = new FileStream(filename, FileMode.Create, FileAccess.Write);
                         StreamWriter sw = new StreamWriter(fs);
                         StringBuilder sb = new StringBuilder();
                         foreach (page p in Data.p.pages)
@@ -116,11 +113,11 @@ namespace Qieshu
                         sw.Close();
                         fs.Close();
                         MessageBox.Show("保存完成！" + Environment.NewLine + filename, "導出", MessageBoxButtons.OK);
-                    //}
-                    //catch (Exception)
-                    //{
-                    //    throw new Exception("（╯－＿－）╯╧╧");
-                    //}
+                    }
+                    catch (Exception)
+                    {
+                        throw new Exception("（╯－＿－）╯╧╧");
+                    }
                 }
             }
         }
