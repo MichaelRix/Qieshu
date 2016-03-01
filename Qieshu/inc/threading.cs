@@ -51,6 +51,10 @@ namespace Qieshu
         {
             eliThreading.isWorking = true;
             string url = Url.Text;
+            if(Data.p != null)
+            {
+                Data.p.status = false;
+            }
             Data.p = new post(url);
             eliThreading.isWorking = false;
         }

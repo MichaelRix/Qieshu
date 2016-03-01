@@ -92,9 +92,17 @@ namespace Qieshu
                 string filename = exportDialog.FileName;
                 if (filename != "")
                 {
-                    try
+                    //try
+                    //{
+                    FileStream fs;
+                    if (File.Exists(filename))
                     {
-                    FileStream fs = new FileStream(filename, FileMode.CreateNew | FileMode.Truncate, FileAccess.Write);
+                        fs = new FileStream(filename, FileMode.Truncate, FileAccess.Write);
+                    }
+                    else
+                    {
+                        fs = new FileStream(filename, FileMode.CreateNew, FileAccess.Write);
+                    }
                         StreamWriter sw = new StreamWriter(fs);
                         StringBuilder sb = new StringBuilder();
                         foreach (page p in Data.p.pages)
@@ -108,11 +116,11 @@ namespace Qieshu
                         sw.Close();
                         fs.Close();
                         MessageBox.Show("保存完成！" + Environment.NewLine + filename, "導出", MessageBoxButtons.OK);
-                    }
-                    catch (Exception)
-                    {
-                        throw new Exception("（╯－＿－）╯╧╧");
-                    }
+                    //}
+                    //catch (Exception)
+                    //{
+                    //    throw new Exception("（╯－＿－）╯╧╧");
+                    //}
                 }
             }
         }
