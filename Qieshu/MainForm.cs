@@ -17,6 +17,7 @@ namespace Qieshu
         private void MainForm_Load(object sender, EventArgs e)
         {
             CheckForIllegalCrossThreadCalls = false;
+            Tabs.SelectTab(1);
         }
 
         private void Url_TextChanged(object sender, EventArgs e)
@@ -46,11 +47,15 @@ namespace Qieshu
             if (eliThreading.isWorking) return;
             if(Data.p != null)
             {
-                if(MessageBox.Show("你確定要放棄當前所有内容并進行采集嗎？", "核准選項", MessageBoxButtons.YesNo) == DialogResult.No)
+                if(MessageBox.Show("你確定要放棄當前所有内容并進行采集嗎？", "核准選項", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                     return;
             }
             string url = Url.Text;
-            if (url.IndexOf("http://tieba.baidu.com/p/") != 0) return;
+            if (url.IndexOf("http://tieba.baidu.com/p/") != 0)
+            {
+                MessageBox.Show("你這是要上天啊！", "非法操作", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             if (url != "")
             {
                 statusText.Text = "正在載入……";
@@ -89,7 +94,11 @@ namespace Qieshu
 
         private void OutputButton_Click(object sender, EventArgs e)
         {
-            if (Data.p == null || !Data.p.status) return;
+            if (Data.p == null || !Data.p.status)
+            {
+                MessageBox.Show("然而并沒有什麽可以輸出的！", "無用操作", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
             exportDialog.FileName = Data.p.title + ".txt";
             if (exportDialog.ShowDialog() == DialogResult.OK)
             {
@@ -118,6 +127,21 @@ namespace Qieshu
                         throw new Exception("（╯－＿－）╯╧╧");
                     }
                 }
+            }
+        }
+
+        private void Tabs_Selected(object sender, TabControlEventArgs e)
+        {
+            switch (e.TabPageIndex)
+            {
+                case 0:
+                    PostTreeView.Visible = true;
+                    ContentBox.Visible = false;
+                    break;
+                case 1:
+                    PostTreeView.Visible = false;
+                    ContentBox.Visible = true;
+                    break;
             }
         }
     }
