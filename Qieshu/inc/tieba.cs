@@ -32,7 +32,6 @@ namespace Qieshu.inc
         {
             string pattern = "thread_id:[0-9]*,";
             string r = match.preg_match(raw, pattern);
-            // thread_id:4039232986,
             pattern = ":[0-9]*,";
             r = match.preg_match(r, pattern);
             return r.Substring(1, r.Length - 2);
@@ -41,7 +40,6 @@ namespace Qieshu.inc
         {
             string pattern = "title:.*?\",";
             string r = match.preg_match(raw, pattern);
-            // title: "海未「惨剧之馆」番外篇",
             pattern = "\".*\"";
             r = match.preg_match(r, pattern);
             return r.Substring(1, r.Length - 2);
@@ -50,7 +48,6 @@ namespace Qieshu.inc
         {
             string pattern = "author:.*?\",";
             string r = match.preg_match(raw, pattern);
-            // author: "AIR丶珍惜",
             pattern = "\".*\"";
             r = match.preg_match(r, pattern);
             return r.Substring(1, r.Length - 2);
@@ -60,8 +57,6 @@ namespace Qieshu.inc
             string pattern = "pn=[0-9]*\">尾页</a>";
             string r = match.preg_match(raw, pattern);
             if (r == "") return 1;
-            // ?pn=11">尾页</a>
-            // 01234567
             pattern = "=[0-9]*\"";
             r = match.preg_match(r, pattern);
             r = r.Substring(1, r.Length - 2);
@@ -78,8 +73,6 @@ namespace Qieshu.inc
                 string tag = rawimages[i];
 
                 pattern = "width=\"[0-9].*?\"";
-                // width="450"
-                // 0123456789A
                 string ws = match.preg_match(tag, pattern);
                 ws = ws.Substring(7, ws.Length - 8);
                 images[i].width = Convert.ToInt32(ws);
