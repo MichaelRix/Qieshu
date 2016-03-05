@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Windows.Forms;
+using System.Threading;
 using System.Text;
 using Qieshu.inc;
 
@@ -15,14 +16,24 @@ namespace Qieshu
                     ContentBox.Text += eliThreading.updateText;
                     ContentBox.Text += "數據已經獲取，3s之後預覽内容……";
                     Thread.Sleep(3000);
+
                     StringBuilder sb = new StringBuilder();
-                    foreach (page pg in Data.p.pages)
+                    string root = "POST" + Data.p.pid + "R";
+                    PostTreeView.BeginUpdate();
+                    PostTreeView.Nodes.Add(root, Data.p.title);
+                    int count = 1;
+                    foreach (page Page in Data.p.pages)
                     {
-                        foreach (floor f in pg.floors)
+                        string key = "PAGE" + count;
+                        PostTreeView.Nodes[root].Nodes.Add(key, "第" + count + "頁");
+                        foreach (floor f in Page.floors)
                         {
+                            PostTreeView.Nodes[root].Nodes[key].Nodes.Add(match.excerpt(f.content));
                             sb.Append(f.content);
                         }
+                        count++;
                     }
+                    PostTreeView.EndUpdate();
                     ContentBox.Text = sb.ToString();
                     statusText.Text = "載入完畢！" + Data.p.pn + "/" + Data.p.pn;
                     currentMission.Text = "處理完成：" + Data.p.title + " 由 " + Data.p.lz + " 發佈。";

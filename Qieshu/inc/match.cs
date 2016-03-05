@@ -63,5 +63,13 @@ namespace Qieshu.inc
             source = htmlspecialchars_decode(source);
             return source;
         }
+
+        public static string excerpt(string source, int length = 30)
+        {
+            source = trim_left(source);
+            if (source.Length < 30) return source;
+            source = source.Substring(0, length);
+            return source + "…";
+        }
     }
 }
