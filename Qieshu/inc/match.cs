@@ -64,7 +64,7 @@ namespace Qieshu.inc
             return source;
         }
 
-        public static string excerpt(string source, int length = 30)
+        public static string excerpt(string source, int length = 40)
         {
             source = trim_left(source);
             if (source.Length < 30) return source;

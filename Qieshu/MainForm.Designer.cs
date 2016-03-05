@@ -55,7 +55,7 @@
             // GetButton
             // 
             this.GetButton.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.GetButton.Location = new System.Drawing.Point(709, 7);
+            this.GetButton.Location = new System.Drawing.Point(710, 7);
             this.GetButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.GetButton.Name = "GetButton";
             this.GetButton.Size = new System.Drawing.Size(124, 32);
@@ -76,7 +76,7 @@
             // 
             // ContentBox
             // 
-            this.ContentBox.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ContentBox.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.ContentBox.Location = new System.Drawing.Point(46, 81);
             this.ContentBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.ContentBox.MaxLength = 2147483647;

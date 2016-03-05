@@ -37,15 +37,18 @@ namespace Qieshu
         {
             string root = "POST" + Data.p.pid + "R";
             PostTreeView.BeginUpdate();
+            if(PostTreeView.Nodes.Find(root, false).Length != 0)
+                PostTreeView.Nodes.RemoveByKey(root);
             PostTreeView.Nodes.Add(root, Data.p.title);
             int count = 1;
             foreach (page Page in Data.p.pages)
             {
-                string key = "PAGE" + count;
+                string key = root + count;
                 PostTreeView.Nodes[root].Nodes.Add(key, "第" + count + "頁");
                 foreach (floor f in Page.floors)
                 {
-                    PostTreeView.Nodes[root].Nodes[key].Nodes.Add(match.excerpt(f.content));
+                    if(f.content != "")
+                        PostTreeView.Nodes[root].Nodes[key].Nodes.Add(match.excerpt(f.content));
                 }
                 count++;
             }
@@ -76,7 +79,6 @@ namespace Qieshu
                 }
             }
         }
-
         private void WorkingThread()
         {
             eliThreading.isWorking = true;
@@ -129,7 +131,7 @@ namespace Qieshu.inc
         public static void textUpdate(int workingPage)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("[" + System.DateTime.Now.ToLongTimeString() + "] ");
+            sb.Append("[" + DateTime.Now.ToLongTimeString() + "] ");
             sb.Append("頁面");
             sb.Append(workingPage);
             sb.Append("，采集評論");

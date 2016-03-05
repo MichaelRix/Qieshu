@@ -30,7 +30,7 @@ namespace Qieshu.inc
 
         public string getPostId()
         {
-            string pattern = "thread_id:[0-9]*,";
+            string pattern = "thread_id\\s*:\\s*[0-9]*,";
             string r = match.preg_match(raw, pattern);
             pattern = ":[0-9]*,";
             r = match.preg_match(r, pattern);
