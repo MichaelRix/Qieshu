@@ -14,9 +14,10 @@ namespace Qieshu
             InitializeComponent();
         }
 
+        public delegate void DelegateMethod();
+
         private void MainForm_Load(object sender, EventArgs e)
         {
-            CheckForIllegalCrossThreadCalls = false;
             Tabs.SelectTab(1);
         }
 

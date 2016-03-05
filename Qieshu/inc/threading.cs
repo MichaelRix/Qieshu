@@ -1,4 +1,4 @@
-﻿using System.Windows.Forms;
+﻿using System;
 using System.Threading;
 using System.Text;
 using Qieshu.inc;
@@ -7,37 +7,59 @@ namespace Qieshu
 {
     public partial class MainForm : System.Windows.Forms.Form
     {
+        private void UpdateStatus()
+        {
+            statusText.Text = eliThreading.status;
+            totalStatus.Value = eliThreading.percentage;
+            currentMission.Text = eliThreading.mission;
+            ContentBox.Text += eliThreading.updateText;
+        }
+        private void FillContentBox()
+        {
+            ContentBox.Text += eliThreading.updateText;
+            ContentBox.Text += "數據已經獲取，2s之後預覽内容……";
+            Thread.Sleep(2000);
+
+            StringBuilder sb = new StringBuilder();
+            foreach (page Page in Data.p.pages)
+            {
+                foreach (floor f in Page.floors)
+                {
+                    sb.Append(f.content);
+                }
+            }
+            ContentBox.Text = sb.ToString();
+            statusText.Text = "載入完畢！" + Data.p.pn + "/" + Data.p.pn;
+            currentMission.Text = "處理完成：" + Data.p.title + " 由 " + Data.p.lz + " 發佈。";
+            totalStatus.Value = 100;
+        }
+        private void FillTreeView()
+        {
+            string root = "POST" + Data.p.pid + "R";
+            PostTreeView.BeginUpdate();
+            PostTreeView.Nodes.Add(root, Data.p.title);
+            int count = 1;
+            foreach (page Page in Data.p.pages)
+            {
+                string key = "PAGE" + count;
+                PostTreeView.Nodes[root].Nodes.Add(key, "第" + count + "頁");
+                foreach (floor f in Page.floors)
+                {
+                    PostTreeView.Nodes[root].Nodes[key].Nodes.Add(match.excerpt(f.content));
+                }
+                count++;
+            }
+            PostTreeView.EndUpdate();
+        }
+
         private void ThreadFunc()
         {
             while (true)
             {
                 if (!eliThreading.isWorking)
                 {
-                    ContentBox.Text += eliThreading.updateText;
-                    ContentBox.Text += "數據已經獲取，3s之後預覽内容……";
-                    Thread.Sleep(3000);
-
-                    StringBuilder sb = new StringBuilder();
-                    string root = "POST" + Data.p.pid + "R";
-                    PostTreeView.BeginUpdate();
-                    PostTreeView.Nodes.Add(root, Data.p.title);
-                    int count = 1;
-                    foreach (page Page in Data.p.pages)
-                    {
-                        string key = "PAGE" + count;
-                        PostTreeView.Nodes[root].Nodes.Add(key, "第" + count + "頁");
-                        foreach (floor f in Page.floors)
-                        {
-                            PostTreeView.Nodes[root].Nodes[key].Nodes.Add(match.excerpt(f.content));
-                            sb.Append(f.content);
-                        }
-                        count++;
-                    }
-                    PostTreeView.EndUpdate();
-                    ContentBox.Text = sb.ToString();
-                    statusText.Text = "載入完畢！" + Data.p.pn + "/" + Data.p.pn;
-                    currentMission.Text = "處理完成：" + Data.p.title + " 由 " + Data.p.lz + " 發佈。";
-                    totalStatus.Value = 100;
+                    ContentBox.Invoke(new DelegateMethod(FillContentBox));
+                    PostTreeView.Invoke(new DelegateMethod(FillTreeView));
                     eliThreading.status = "";
                     eliThreading.percentage = 0;
                     eliThreading.mission = "";
@@ -45,10 +67,7 @@ namespace Qieshu
                 }
                 if (eliThreading.doRequireUpdate)
                 {
-                    statusText.Text = eliThreading.status;
-                    totalStatus.Value = eliThreading.percentage;
-                    currentMission.Text = eliThreading.mission;
-                    ContentBox.Text += eliThreading.updateText;
+                    ContentBox.Invoke(new DelegateMethod(UpdateStatus));
                     eliThreading.reportUpdated();
                 }
                 else
