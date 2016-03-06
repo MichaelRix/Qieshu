@@ -17,8 +17,6 @@ namespace Qieshu
         private void FillContentBox()
         {
             ContentBox.Text += eliThreading.updateText;
-            ContentBox.Text += "數據已經獲取，2s之後預覽内容……";
-            Thread.Sleep(2000);
 
             StringBuilder sb = new StringBuilder();
             foreach (page Page in Data.p.pages)

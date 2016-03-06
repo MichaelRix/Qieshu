@@ -7,19 +7,26 @@ namespace Qieshu.inc
     
     public class http
     {
-        public static string get(string url)
+        public static string get(string url, int errorlevel = 0)
         {
             try
             {
-                WebRequest request = WebRequest.Create(url);
-                request.Proxy = WebRequest.DefaultWebProxy;
+                HttpWebRequest request = HttpWebRequest.CreateHttp(url);
+                request.Proxy = HttpWebRequest.DefaultWebProxy;
                 Stream response = request.GetResponse().GetResponseStream();
                 StreamReader reader = new StreamReader(response);
                 string responseText = reader.ReadToEnd();
                 return responseText;
-            }catch(Exception)
+            }catch(WebException e)
             {
-                throw new Exception("（╯－＿－）╯╧╧");
+                if(errorlevel < 3)
+                {
+                    return get(url, errorlevel + 1);
+                }
+                else
+                {
+                    throw new Exception("開發者：我勒個去，" + e.Message);
+                }
             }
         }
 
