@@ -30,36 +30,26 @@ namespace Qieshu.inc
 
         public string getPostId()
         {
-            string pattern = "thread_id\\s*:\\s*[0-9]*,";
+            string pattern = @"(?<=thread_id\s*:\s*)\d+(?=,)";
             string r = match.preg_match(raw, pattern);
-            pattern = ":[0-9]*,";
-            r = match.preg_match(r, pattern);
-            return r.Substring(1, r.Length - 2);
+            return r;
         }
         public string getPostTitle()
         {
-            string pattern = "title:.*?\",";
+            string pattern = "(?<=title\\s*:\\s*\").+?(?=\",)";
             string r = match.preg_match(raw, pattern);
-            pattern = "\".*\"";
-            r = match.preg_match(r, pattern);
-            return r.Substring(1, r.Length - 2);
+            return r;
         }
         public string getPostAuthor()
         {
-            string pattern = "author:.*?\",";
+            string pattern = "(?<=author\\s*?:\\s*\").+?(?=\",)";
             string r = match.preg_match(raw, pattern);
-            pattern = "\".*\"";
-            r = match.preg_match(r, pattern);
-            return r.Substring(1, r.Length - 2);
+            return r;
         }
         public int getPostPageCount()
         {
-            string pattern = "pn=[0-9]*\">尾页</a>";
+            string pattern = "(?<=\"total_page\":)\\d+(?=\\D)";
             string r = match.preg_match(raw, pattern);
-            if (r == "") return 1;
-            pattern = "=[0-9]*\"";
-            r = match.preg_match(r, pattern);
-            r = r.Substring(1, r.Length - 2);
             return Convert.ToInt32(r);
         }
         public image[] getFloorImages(string rawfloor)
@@ -72,25 +62,18 @@ namespace Qieshu.inc
                 images[i] = new image();
                 string tag = rawimages[i];
 
-                pattern = "width=\"[0-9].*?\"";
+                pattern = "(?<=width=\")\\d+?(?=\")";
                 string ws = match.preg_match(tag, pattern);
-                ws = ws.Substring(7, ws.Length - 8);
                 images[i].width = Convert.ToInt32(ws);
 
-                pattern = "height=\"[0-9].*?\"";
-                // height="450"
-                // 0123456789AB
+                pattern = "(?<=height=\")\\d+?(?=\")";
                 string hs = match.preg_match(tag, pattern);
-                hs = hs.Substring(8, hs.Length - 9);
                 images[i].height = Convert.ToInt32(hs);
 
-                pattern = "src=\".*?\"";
-                // src="s.jpg"
-                // 0123456789A
+                pattern = "(?<=src=\").*?(?=\")";
                 string src = match.preg_match(tag, pattern);
-                src = src.Substring(5, src.Length - 6);
                 images[i].url = src;
-                pattern = "\\.\\w+$";
+                pattern = "(?!\\.)\\w+$";
                 images[i].format = match.preg_match(src, pattern);
             }
             eliThreading.floorUpdate(0, images.Length);

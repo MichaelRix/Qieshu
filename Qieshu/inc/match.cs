@@ -7,18 +7,18 @@ namespace Qieshu.inc
 {
     class match
     {
-        public static string preg_match(string source, string pattern)
+        public static string preg_match(string source, string pattern, RegexOptions options = RegexOptions.Singleline | RegexOptions.Multiline)
         {
             if (source == "" || pattern == "") return "";
-            Regex r = new Regex(pattern, RegexOptions.Singleline | RegexOptions.Multiline);
+            Regex r = new Regex(pattern, options);
             Match m = r.Match(source);
             return m.Value;
         }
 
-        public static string[] preg_match_multi(string source, string pattern)
+        public static string[] preg_match_multi(string source, string pattern, RegexOptions options = RegexOptions.Singleline | RegexOptions.Multiline)
         {
             if (source == "" || pattern == "") return null;
-            Regex r = new Regex(pattern, RegexOptions.Singleline | RegexOptions.Multiline);
+            Regex r = new Regex(pattern, options);
             MatchCollection colle = r.Matches(source);
             string[] results = new string[colle.Count];
             for (int i = 0; i < colle.Count; i++)
