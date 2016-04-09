@@ -59,12 +59,15 @@ namespace Qieshu
             {
                 if (!eliThreading.isWorking)
                 {
-                    ContentBox.Invoke(new DelegateMethod(FillContentBox));
-                    PostTreeView.Invoke(new DelegateMethod(FillTreeView));
-                    eliThreading.status = "";
-                    eliThreading.percentage = 0;
-                    eliThreading.mission = "";
-                    return;
+                    if (Data.p != null)
+                    {
+                        ContentBox.Invoke(new DelegateMethod(FillContentBox));
+                        PostTreeView.Invoke(new DelegateMethod(FillTreeView));
+                        eliThreading.status = "";
+                        eliThreading.percentage = 0;
+                        eliThreading.mission = "";
+                        return;
+                    }
                 }
                 if (eliThreading.doRequireUpdate)
                 {

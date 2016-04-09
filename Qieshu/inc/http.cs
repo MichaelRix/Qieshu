@@ -22,15 +22,14 @@ namespace Qieshu.inc
                 if(errorlevel < 3)
                 {
                     return get(url, errorlevel + 1);
-                }
-                else
+                } else
                 {
                     throw new Exception("開發者：我勒個去，" + e.Message);
                 }
             }
         }
 
-        public static void download(string url, string filepath)
+        public static void download(string url, string filepath, int errorlevel = 0)
         {
             try
             {
@@ -38,9 +37,15 @@ namespace Qieshu.inc
                 Uri uri = new Uri(url);
                 client.DownloadFileAsync(uri, filepath);
             }
-            catch (Exception)
+            catch (WebException e)
             {
-                throw new Exception("（╯－＿－）╯╧╧");
+                if (errorlevel < 3)
+                {
+                    download(url, filepath, errorlevel + 1);
+                } else
+                {
+                    throw new Exception("開發者：我勒個去，" + e.Message);
+                }
             }
         }
     }

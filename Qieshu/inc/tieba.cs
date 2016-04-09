@@ -10,6 +10,7 @@ namespace Qieshu.inc
     }
     public class floor
     {
+        public string owner;
         public string content;
         public image[] images;
     }
@@ -85,10 +86,13 @@ namespace Qieshu.inc
             if (number != 1) raw = http.get(url);
             string pattern = "<cc>.*?</cc>";
             string[] rawfloors = match.preg_match_multi(raw, pattern);
+            pattern = "(?<=<img\\s*?username=\").*?(?=\")";
+            string[] owners = match.preg_match_multi(raw, pattern);
             floor[] floors = new floor[rawfloors.Length];
             for(int i = 0; i < rawfloors.Length; i++)
             {
                 floors[i] = new floor();
+                floors[i].owner = owners[i];
                 floors[i].content = match.html2plain(rawfloors[i]);
                 if (Options.doRemoveShort)
                 {
