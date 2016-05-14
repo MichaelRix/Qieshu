@@ -11,8 +11,8 @@ namespace Qieshu.inc
         {
             try
             {
-                HttpWebRequest request = HttpWebRequest.CreateHttp(url);
-                request.Proxy = HttpWebRequest.DefaultWebProxy;
+                HttpWebRequest request = WebRequest.CreateHttp(url);
+                request.Proxy = WebRequest.DefaultWebProxy;
                 Stream response = request.GetResponse().GetResponseStream();
                 StreamReader reader = new StreamReader(response);
                 string responseText = reader.ReadToEnd();

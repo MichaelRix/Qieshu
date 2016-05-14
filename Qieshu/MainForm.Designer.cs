@@ -94,9 +94,9 @@
             this.TipUrl.Location = new System.Drawing.Point(43, 14);
             this.TipUrl.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.TipUrl.Name = "TipUrl";
-            this.TipUrl.Size = new System.Drawing.Size(117, 17);
+            this.TipUrl.Size = new System.Drawing.Size(97, 17);
             this.TipUrl.TabIndex = 3;
-            this.TipUrl.Text = "帖URL（或粘貼id）:";
+            this.TipUrl.Text = "帖URL（或tid）:";
             // 
             // checkSeeLZonly
             // 
@@ -120,9 +120,9 @@
             this.checkRemoveShort.Location = new System.Drawing.Point(147, 46);
             this.checkRemoveShort.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.checkRemoveShort.Name = "checkRemoveShort";
-            this.checkRemoveShort.Size = new System.Drawing.Size(141, 25);
+            this.checkRemoveShort.Size = new System.Drawing.Size(94, 25);
             this.checkRemoveShort.TabIndex = 5;
-            this.checkRemoveShort.Text = "屏蔽短句，閾值";
+            this.checkRemoveShort.Text = "避短 size";
             this.checkRemoveShort.UseVisualStyleBackColor = true;
             this.checkRemoveShort.CheckedChanged += new System.EventHandler(this.checkRemoveShort_CheckedChanged);
             // 
@@ -130,12 +130,12 @@
             // 
             this.checkTrimLeft.AutoSize = true;
             this.checkTrimLeft.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.checkTrimLeft.Location = new System.Drawing.Point(413, 46);
+            this.checkTrimLeft.Location = new System.Drawing.Point(354, 46);
             this.checkTrimLeft.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.checkTrimLeft.Name = "checkTrimLeft";
-            this.checkTrimLeft.Size = new System.Drawing.Size(141, 25);
+            this.checkTrimLeft.Size = new System.Drawing.Size(61, 25);
             this.checkTrimLeft.TabIndex = 6;
-            this.checkTrimLeft.Text = "去除空格、空行";
+            this.checkTrimLeft.Text = "去空";
             this.checkTrimLeft.UseVisualStyleBackColor = true;
             this.checkTrimLeft.CheckedChanged += new System.EventHandler(this.checkTrimLeft_CheckedChanged);
             // 
@@ -194,7 +194,7 @@
             // 
             // vValNum
             // 
-            this.vValNum.Location = new System.Drawing.Point(296, 45);
+            this.vValNum.Location = new System.Drawing.Point(237, 45);
             this.vValNum.Margin = new System.Windows.Forms.Padding(4);
             this.vValNum.Maximum = new decimal(new int[] {
             500,

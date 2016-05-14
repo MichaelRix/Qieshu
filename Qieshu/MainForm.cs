@@ -80,11 +80,53 @@ namespace Qieshu
 
         private void checkRemoveShort_CheckedChanged(object sender, EventArgs e)
         {
-            Options.doRemoveShort = checkRemoveShort.Checked;
+            if (Data.p != null && checkRemoveShort.Checked)
+            {
+                foreach (page Page in Data.p.pages)
+                {
+                    floor[] Floors;
+                    int count = 0;
+                    foreach (floor Floor in Page.floors)
+                    {
+                        if (Floor.content.Length >= Options.vVal)
+                        {
+                            count++;
+                        }
+                    }
+                    Floors = new floor[count];
+                    int i = 0;
+                    foreach(floor Floor in Page.floors)
+                    {
+                        if (Floor.content.Length >= Options.vVal)
+                        {
+                            Floors[i] = new floor();
+                            Floors[i].owner = Floor.owner;
+                            Floors[i].content = Floor.content;
+                            Floors[i].images = Floor.images;
+                            ++i;
+                        }
+                    }
+                    Page.floors = Floors;
+                }
+                ContentBox.Invoke(new DelegateMethod(FillContentBox));
+                PostTreeView.Invoke(new DelegateMethod(FillTreeView));
+            }
         }
 
         private void checkTrimLeft_CheckedChanged(object sender, EventArgs e)
         {
+            if (Data.p != null && checkTrimLeft.Checked)
+            {
+                foreach(page Page in Data.p.pages)
+                {
+                    foreach(floor Floor in Page.floors)
+                    {
+                        Floor.content = match.trim_left(Floor.content);
+                    }
+                }
+                ContentBox.Invoke(new DelegateMethod(FillContentBox));
+                PostTreeView.Invoke(new DelegateMethod(FillTreeView));
+            }
             Options.doTrimLeft = checkTrimLeft.Checked;
         }
 
